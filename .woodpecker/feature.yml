@@ -1,13 +1,17 @@
 steps:
-  build-and-push:
-    image: woodpeckerci/plugin-docker-buildx
+  build-and-push-feature:
+    image: redpencil/plugin-docker-buildx
     settings:
-      repo: "${CI_REPO_OWNER##mu-}/${CI_REPO_NAME%%-service}"
+      repo: ${CI_REPO_OWNER/redpencilio/redpencil}/sparql-parser
       tags: "feature-${CI_COMMIT_BRANCH##feature/}"
+      platforms: linux/amd64,linux/arm64
+      purge: true
       username:
         from_secret: docker_username
       password:
         from_secret: docker_password
+      ssh_key:
+        from_secret: ssh_key
 when:
   - event: push
     branch: [feature/*]

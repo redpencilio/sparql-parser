@@ -15,4 +15,11 @@ CMD ["/launch-sparql-parser.sh"]
 
 COPY . /app
 
+# Support running as an arbitrary UID in group 0 (OpenShift restricted SCC)
+RUN mkdir -p /config \
+ && chmod 755 /usr/local/bin/sbcl \
+ && chgrp -R 0 /root /app /config /data \
+ && chmod -R g=u /root /app /config /data /etc/passwd
+ENV HOME=/root
+
 EXPOSE 8890
